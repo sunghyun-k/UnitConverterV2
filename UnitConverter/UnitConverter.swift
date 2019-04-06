@@ -26,22 +26,22 @@ class UnitConverter {
     /// 단위 정보를 저장합니다. 첫번쨰 원소는 기본적으로 표시되는 단위입니다.
     var types = [
         Type.length: [
-            Unit.init(notations: ["m", "meter", "미터"], scaleInfo: 1),
-            Unit.init(notations: ["cm", "centimeter", "센티미터"], scaleInfo: 0.01),
-            Unit.init(notations: ["inch", "인치"], scaleInfo: 0.0254),
-            Unit.init(notations: ["yard", "야드"], scaleInfo: 0.0277778)
+            Unit.init(notations: ["m", "meter"], scaleInfo: 1),
+            Unit.init(notations: ["cm", "centimeter"], scaleInfo: 0.01),
+            Unit.init(notations: ["inch"], scaleInfo: 0.0254),
+            Unit.init(notations: ["yard"], scaleInfo: 0.0277778)
         ],
         Type.mass: [
-            Unit.init(notations: ["g", "gram", "그램"], scaleInfo: 1),
-            Unit.init(notations: ["kg", "kilogram", "킬로그램"], scaleInfo: 1000),
-            Unit.init(notations: ["lbs", "pound", "lb", "파운드"], scaleInfo: 453.592),
-            Unit.init(notations: ["oz", "ounce", "온스"], scaleInfo: 28.3495)
+            Unit.init(notations: ["g", "gram"], scaleInfo: 1),
+            Unit.init(notations: ["kg", "kilogram"], scaleInfo: 1000),
+            Unit.init(notations: ["lbs", "pound", "lb"], scaleInfo: 453.592),
+            Unit.init(notations: ["oz", "ounce"], scaleInfo: 28.3495)
         ],
         Type.volume: [
-            Unit.init(notations: ["L", "liter", "l", "리터"], scaleInfo: 1),
-            Unit.init(notations: ["pt", "pint", "파인트"], scaleInfo: 0.473176),
-            Unit.init(notations: ["qt", "quart", "쿼트"], scaleInfo: 0.946353),
-            Unit.init(notations: ["gal", "galon", "갤런"], scaleInfo: 4.546)
+            Unit.init(notations: ["L", "liter", "l"], scaleInfo: 1),
+            Unit.init(notations: ["pt", "pint"], scaleInfo: 0.473176),
+            Unit.init(notations: ["qt", "quart"], scaleInfo: 0.946353),
+            Unit.init(notations: ["gal", "galon"], scaleInfo: 4.546)
         ]
     ]
     
@@ -85,6 +85,7 @@ class UnitConverter {
             if units.indices.contains(1) {
                 outputUnits = units[1].components(separatedBy: ",")
             }
+            print("inputValue: \(inputValue), inputUnit: \(inputUnit), outputUnits: \(outputUnits)")
             return (inputValue, inputUnit, outputUnits)
         } // convertFormat의 끝
         
