@@ -115,6 +115,6 @@ func addUnit() {
         - 기준 단위(\(waypointUnit.notations[0]))로 변환 시에 곱해야 하는 수: \(scaleInfo)
         
         """)
-} // addUnit()의 끝
+} // addUnit의 끝
 
 runUnitConverter()

@@ -85,9 +85,8 @@ class UnitConverter {
             if units.indices.contains(1) {
                 outputUnits = units[1].components(separatedBy: ",")
             }
-//            print("outputUnits: \(outputUnits)")
             return (inputValue, inputUnit, outputUnits)
-        }
+        } // convertFormat의 끝
         
         func convert(_ inputValue: Double, from inputUnit: String, to outputUnits: [String]) -> [(value: Double, unit: Unit)]? {
             
@@ -106,7 +105,6 @@ class UnitConverter {
             /// 출력 단위로 변환한 값들을 반환합니다. 비어있는 경우 기준 단위를 반환합니다.
             func convertFromWaypoint(_ type: Type, _ inputValue: Double, to outputUnits: [String]) -> [(value: Double, unit: Unit)] {
                 if outputUnits.isEmpty {
-                    //TODO: 비어있는 경우 추가하기
                     for unit in types[type]! {
                         if unit.isDefaultOutput {
                             return [(inputValue, unit)]
@@ -125,14 +123,11 @@ class UnitConverter {
             }
             
             
-            var outputs: [(value: Double, unit: Unit)] = []
             guard let waypoint = convertToWaypoint(inputValue, from: inputUnit) else {
                 return nil
             }
-            outputs = convertFromWaypoint(waypoint.type, waypoint.value, to: outputUnits)
-            
-            return outputs
-        }
+            return convertFromWaypoint(waypoint.type, waypoint.value, to: outputUnits)
+        } // convert의 끝
         
         
         guard let info = convertFormat(input) else {

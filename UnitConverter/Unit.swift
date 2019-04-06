@@ -14,10 +14,8 @@ struct Unit {
             isDefaultOutput = true
         }
     }
-    
     init() {
         notations = []
         scaleInfo = 0
     }
-    
 }
