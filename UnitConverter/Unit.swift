@@ -10,6 +10,14 @@ struct Unit {
     init(notations: [String], scaleInfo: Double) {
         self.notations = notations
         self.scaleInfo = scaleInfo
+        if scaleInfo == 1 {
+            isDefaultOutput = true
+        }
+    }
+    
+    init() {
+        notations = []
+        scaleInfo = 0
     }
     
 }

@@ -21,26 +21,27 @@ enum Type {
     }
 }
 
-
 class UnitConverter {
     
-    /// 단위 정보를 저장합니다. 출력할 단위를 입력하지 않을 시 기본으로 출력하고 싶은 단위가 있다면 빈 문자열을 배열에 추가하십시오.
+    /// 단위 정보를 저장합니다. 첫번쨰 원소는 기본적으로 표시되는 단위입니다.
     var types = [
         Type.length: [
-            //TODO: type: Type.length 지우기
-            Unit.init(notations: ["meter", "m"], scaleInfo: 1),
-            Unit.init(notations: ["centimeter", "cm"], scaleInfo: 0.01),
-            Unit.init(notations: ["inch"], scaleInfo: 0.0254),
-            Unit.init(notations: ["yard"], scaleInfo: 0.0277778)
+            Unit.init(notations: ["m", "meter", "미터"], scaleInfo: 1),
+            Unit.init(notations: ["cm", "centimeter", "센티미터"], scaleInfo: 0.01),
+            Unit.init(notations: ["inch", "인치"], scaleInfo: 0.0254),
+            Unit.init(notations: ["yard", "야드"], scaleInfo: 0.0277778)
         ],
         Type.mass: [
-            Unit.init(notations: ["gram", "g"], scaleInfo: 1),
-            Unit.init(notations: ["kilogram", "kg"], scaleInfo: 1000),
-            Unit.init(notations: ["pound", "lbs", "lb"], scaleInfo: 453.592),
-            Unit.init(notations: ["ounce", "oz"], scaleInfo: 28.349500000294)
+            Unit.init(notations: ["g", "gram", "그램"], scaleInfo: 1),
+            Unit.init(notations: ["kg", "kilogram", "킬로그램"], scaleInfo: 1000),
+            Unit.init(notations: ["lbs", "pound", "lb", "파운드"], scaleInfo: 453.592),
+            Unit.init(notations: ["oz", "ounce", "온스"], scaleInfo: 28.3495)
         ],
         Type.volume: [
-            
+            Unit.init(notations: ["L", "liter", "l", "리터"], scaleInfo: 1),
+            Unit.init(notations: ["pt", "pint", "파인트"], scaleInfo: 0.473176),
+            Unit.init(notations: ["qt", "quart", "쿼트"], scaleInfo: 0.946353),
+            Unit.init(notations: ["gal", "galon", "갤런"], scaleInfo: 4.546)
         ]
     ]
     
@@ -74,7 +75,7 @@ class UnitConverter {
             // 단위를 inputUnit과 outputUnit으로 나눕니다. inputUnit이 없으면 nil을 반환합니다.
             let units = unformatedUnits.components(separatedBy: " ")
             var inputUnit = ""
-            var outputUnit: [String] = []
+            var outputUnits: [String] = []
             if units[0] != "" {
                 inputUnit = units[0]
             } else {
@@ -82,16 +83,16 @@ class UnitConverter {
             }
             // 출력 단위들을 outputUnit에 저장합니다.
             if units.indices.contains(1) {
-                outputUnit = units[1].components(separatedBy: ",")
+                outputUnits = units[1].components(separatedBy: ",")
             }
-            
-            return (inputValue, inputUnit, outputUnit)
+//            print("outputUnits: \(outputUnits)")
+            return (inputValue, inputUnit, outputUnits)
         }
         
-        func convert(_ inputValue: Double, from inputUnit: String, to outputUnits: [String]) -> [(outputValue: Double, outputUnit: Unit)]? {
+        func convert(_ inputValue: Double, from inputUnit: String, to outputUnits: [String]) -> [(value: Double, unit: Unit)]? {
             
             /// 기준 단위로 변환한 값과 측정 형식을 반환합니다. 호환되는 단위를 찾지 못하면 nil을 반환합니다.
-            func convertToWaypoint(_ inputValue: Double, from inputUnit: String) -> (type: Type, outputValue: Double)? {
+            func convertToWaypoint(_ inputValue: Double, from inputUnit: String) -> (type: Type, value: Double)? {
                 for type in types {
                     for unit in type.value {
                         if unit.notations.contains(inputUnit) {
@@ -102,8 +103,16 @@ class UnitConverter {
                 return nil
             }
             
-            /// 출력 단위로 변환한 값들을 반환합니다. 호환되는 단위가 없다면 빈 배열을 반환합니다.
-            func convertFromWaypoint(_ type: Type, _ inputValue: Double, to outputUnits: [String]) -> [(outputValue: Double, outputUnit: Unit)] {
+            /// 출력 단위로 변환한 값들을 반환합니다. 비어있는 경우 기준 단위를 반환합니다.
+            func convertFromWaypoint(_ type: Type, _ inputValue: Double, to outputUnits: [String]) -> [(value: Double, unit: Unit)] {
+                if outputUnits.isEmpty {
+                    //TODO: 비어있는 경우 추가하기
+                    for unit in types[type]! {
+                        if unit.isDefaultOutput {
+                            return [(inputValue, unit)]
+                        }
+                    }
+                }
                 var outputs: [(Double, Unit)] = []
                 for outputUnit in outputUnits {
                     for unit in types[type]! {
@@ -116,11 +125,11 @@ class UnitConverter {
             }
             
             
-            var outputs: [(outputValue: Double, outputUnit: Unit)] = []
+            var outputs: [(value: Double, unit: Unit)] = []
             guard let waypoint = convertToWaypoint(inputValue, from: inputUnit) else {
                 return nil
             }
-            outputs = convertFromWaypoint(waypoint.type, waypoint.outputValue, to: outputUnits)
+            outputs = convertFromWaypoint(waypoint.type, waypoint.value, to: outputUnits)
             
             return outputs
         }
@@ -135,7 +144,11 @@ class UnitConverter {
         
         var message = ""
         for output in outputs {
-            message += "\(output.outputValue)\(output.outputUnit.notations[0])\n"
+            if output.value == Double(Int(output.value)) {
+                message += "결과: \(Int(output.value))\(output.unit.notations[0])\n"
+            } else {
+                message += "결과: \((output.value * 1000).rounded() / 1000)\(output.unit.notations[0])\n"
+            }
         }
         return message
     }
