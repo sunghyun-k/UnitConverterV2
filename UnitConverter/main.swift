@@ -1,67 +1,91 @@
 import Foundation
 
-/// 입력된 문자열을 숫자와 단위로 형태를 바꿉니다. 변환하려는 단위는 `,`로 구분하여 여러개를 입력할 수 있습니다. 올바른 형식이 아니면 nil을 반환합니다.
-func convertFormat(_ input: String) -> (value: Double, inputUnit: String, outputUnits: [String])? {
-    
-    // 숫자는 value에, 단위 문자열은 unformatedUnits에 추가합니다. 가장 첫번째로 숫자가 아닌 문자를 발견하면 추가를 멈춥니다.
-    var number = ""
-    var unformatedUnits = input
-    for character in input {
-        if ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."].contains(String(character)) {
-            number += String(character)
-            unformatedUnits.removeFirst()
-        } else {
-            break
-        }
-    }
-    
-    // 숫자가 없으면 nil을 반환합니다.
-    guard let value = Double(number) else {
-        return nil
-    }
-    
-    // 단위를 inputUnit과 outputUnit으로 나눕니다. inputUnit이 없으면 nil을 반환합니다.
-    let units = unformatedUnits.components(separatedBy: " ")
-    var inputUnit = ""
-    var outputUnit: [String] = []
-    if units[0] != "" {
-        inputUnit = units[0]
-    } else {
-        return nil
-    }
-    if units.indices.contains(1) {
-        outputUnit = units[1].components(separatedBy: ",")
-    } else {
-        outputUnit.append(" ")
-    }
-    
-    return (value, inputUnit, outputUnit)
-}
+let unitConverter = UnitConverter()
 
-
-/// 사용자가 조작하는 방식을 설정합니다.
 func runUnitConverter() {
-    
+    print(
+        """
+        변환할 단위를 입력하십시오.
+        예) 10cm m,yard -> 10cm를 미터와 야드로 변환합니다.
+        지원되는 단위 목록: list, l
+        단위 추가: add, a
+        종료: quit, q
+        """
+    )
     while true {
         let input = readLine()!
-        if input == "q" {
+        switch input {
+        case "list", "l":
+            listUnits()
+        case "add", "a":
+            addUnit()
+        case "quit", "q":
             break
+        default:
+            print(unitConverter.convert(input))
         }
-        
-        // 형태 바꾸기에 실패하면 오류를 출력합니다.
-        if let info = convertFormat(input) {
-            
-            let unitConverter = UnitConverter.init(inputValue: info.value, inputUnit: info.inputUnit, outputUnits: info.outputUnits)
-            for index in 0..<unitConverter.outputUnits.count {
-                print("결과는 \(unitConverter.outputValues[index])\(unitConverter.outputUnits[index]) 입니다.")
-            }
-        } else {
-            print("올바른 형식이 아닙니다.")
-        }
-        
-        
     }
 }
 
+func listUnits() {
+    for type in unitConverter.types {
+        for unit in type.value {
+            print(unit.notations[0])
+        }
+    }
+}
+
+
+func addUnit() {
+    print(
+        """
+        형식을 지정하십시오.
+        길이: 1
+        질량: 2
+        부피: 3
+        """
+    )
+    var type = Type.unknown
+    while type == Type.unknown {
+        let selectedType = readLine()!
+        switch selectedType {
+        case "1":
+            type = Type.length
+        case "2":
+            type = Type.mass
+        case "3":
+            type = Type.volume
+        default:
+            print("오류: 형식의 숫자를 입력하세요.")
+        }
+    }
+    
+    print("인식할 수 있도록 표기 방법들을 입력해주십시오. 입력이 끝나면 0 입력.")
+    var notations: [String] = []
+    while true {
+        let notation = readLine()!
+        if notation == "0" {
+            break
+        }
+        notations.append(notation)
+    }
+    
+    print("이 단위를 기준 단위로 변환하려면 어떤 수를 곱해야 합니까?")
+    var scaleInfo = Double()
+    while true {
+        if let number = Double(readLine()!) {
+            scaleInfo = number
+            break
+        }
+        print("숫자가 아닙니다. 다시 입력하십시오.")
+    }
+    unitConverter.add(type: type, unit: Unit.init(notations: notations, scaleInfo: scaleInfo))
+    print(
+        """
+        아래 내용을 저장했습니다.
+        유형: \(type.description()), 표기: \(notations), 기준 단위 변환에 곱해야 하는 수: \(scaleInfo)
+        """
+    )
+}
 
 runUnitConverter()

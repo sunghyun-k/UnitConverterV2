@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F2D903052257357300693627 /* UnitConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D903042257357300693627 /* UnitConverter.swift */; };
 		F2D9030C225735A600693627 /* Unit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9030B225735A600693627 /* Unit.swift */; };
-		F2D9030E225741B200693627 /* MeasureUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9030D225741B200693627 /* MeasureUnits.swift */; };
 		F2D903102257596900693627 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9030F2257596900693627 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +28,6 @@
 		F2D903012257357300693627 /* UnitConverter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitConverter; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D903042257357300693627 /* UnitConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitConverter.swift; sourceTree = "<group>"; };
 		F2D9030B225735A600693627 /* Unit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unit.swift; sourceTree = "<group>"; };
-		F2D9030D225741B200693627 /* MeasureUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureUnits.swift; sourceTree = "<group>"; };
 		F2D9030F2257596900693627 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,10 +61,9 @@
 		F2D903032257357300693627 /* UnitConverter */ = {
 			isa = PBXGroup;
 			children = (
-				F2D903042257357300693627 /* UnitConverter.swift */,
 				F2D9030F2257596900693627 /* main.swift */,
+				F2D903042257357300693627 /* UnitConverter.swift */,
 				F2D9030B225735A600693627 /* Unit.swift */,
-				F2D9030D225741B200693627 /* MeasureUnits.swift */,
 			);
 			path = UnitConverter;
 			sourceTree = "<group>";
@@ -131,7 +128,6 @@
 				F2D903052257357300693627 /* UnitConverter.swift in Sources */,
 				F2D9030C225735A600693627 /* Unit.swift in Sources */,
 				F2D903102257596900693627 /* main.swift in Sources */,
-				F2D9030E225741B200693627 /* MeasureUnits.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
