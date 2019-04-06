@@ -21,7 +21,7 @@ func runUnitConverter() {
             addUnit()
             print(startMessage)
         case "quit", "q":
-            break
+            return
         default:
             print(unitConverter.convert(input))
         }
